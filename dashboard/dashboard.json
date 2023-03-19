@@ -1,0 +1,151 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "target": {
+          "limit": 100,
+          "matchAny": false,
+          "tags": [],
+          "type": "dashboard"
+        },
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": null,
+  "links": [],
+  "liveNow": false,
+  "panels": [
+    {
+      "datasource": {
+        "type": "simple-outlier-detection-poc",
+        "uid": "FfWKE9-Vk"
+      },
+      "description": "Did we manage to spot all of them? How can we improve the detection of outliers?",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "fixed"
+          },
+          "custom": {
+            "fillOpacity": 70,
+            "lineWidth": 0,
+            "spanNulls": false
+          },
+          "decimals": 2,
+          "displayName": "",
+          "mappings": [
+            {
+              "options": {
+                "match": "false",
+                "result": {
+                  "color": "green",
+                  "index": 0,
+                  "text": "Okay"
+                }
+              },
+              "type": "special"
+            },
+            {
+              "options": {
+                "match": "true",
+                "result": {
+                  "color": "red",
+                  "index": 1,
+                  "text": "Outlier"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Outlier"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Status"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "id": 3,
+      "options": {
+        "alignValue": "center",
+        "legend": {
+          "displayMode": "hidden",
+          "placement": "bottom"
+        },
+        "mergeValues": true,
+        "rowHeight": 0.9,
+        "showValue": "auto",
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "8.5.10",
+      "targets": [
+        {
+          "datasource": {
+            "type": "simple-outlier-detection-poc",
+            "uid": "FfWKE9-Vk"
+          },
+          "refId": "A"
+        }
+      ],
+      "title": "Our really nice data - with some outliers",
+      "transformations": [],
+      "type": "state-timeline"
+    }
+  ],
+  "refresh": "",
+  "schemaVersion": 36,
+  "style": "dark",
+  "tags": [],
+  "templating": {
+    "list": []
+  },
+  "time": {
+    "from": "now-6h",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "",
+  "title": "Simple Outlier Detection Datasource - POC",
+  "version": 25,
+  "weekStart": ""
+}

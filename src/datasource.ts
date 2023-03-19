@@ -38,8 +38,6 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
             ],
           });
 
-          console.log(response)
-
           let full_points: Point[] = [];
 
           response.data.query_response.forEach((point: any) => {
@@ -51,7 +49,6 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
           for (let i = 0; i  < full_points.length;  i++) {
             frame.appendRow([full_points[i].time, full_points[i].value, labels[i]]);
           }
-          console.log(JSON.stringify(frame))
           return frame;
         })
     );
@@ -72,8 +69,6 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
 
 
   getLabels(full_points: Point[]) {
-
-    console.log("Full pointd: " + full_points);
 
     const isolation_forest = new IsolationForest();
     isolation_forest.fit(full_points);
