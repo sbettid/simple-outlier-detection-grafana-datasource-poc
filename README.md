@@ -1,1 +1,2 @@
-# simple-outlier-detection-grafana-datasource-poc
+# Simple Outlier Detection Grafana Datasource POC
+

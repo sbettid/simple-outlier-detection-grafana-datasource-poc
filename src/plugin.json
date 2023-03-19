@@ -1,0 +1,26 @@
+{
+  "$schema": "https://raw.githubusercontent.com/grafana/grafana/master/docs/sources/developers/plugins/plugin.schema.json",
+  "type": "datasource",
+  "name": "Simple Outlier Detection POC",
+  "id": "simple-outlier-detection-poc",
+  "metrics": true,
+  "info": {
+    "description": "An extension of the standard influx db datasource with outlying detection techniques",
+    "author": {
+      "name": "Davide Sbetti"
+    },
+    "keywords": ["datasource"],
+    "logos": {
+      "small": "img/logo.svg",
+      "large": "img/logo.svg"
+    },
+    "links": [],
+    "screenshots": [],
+    "version": "%VERSION%",
+    "updated": "%TODAY%"
+  },
+  "dependencies": {
+    "grafanaDependency": "^9.2.5",
+    "plugins": []
+  }
+}
