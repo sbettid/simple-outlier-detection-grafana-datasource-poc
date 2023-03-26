@@ -5,10 +5,6 @@ export interface MyQuery extends DataQuery {
   constant: number;
 }
 
-export const DEFAULT_QUERY: Partial<MyQuery> = {
-  constant: 6.5,
-};
-
 /**
  * These are options configured for each DataSource instance
  */

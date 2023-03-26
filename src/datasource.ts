@@ -5,14 +5,15 @@ import {
   DataSourceInstanceSettings,
   MutableDataFrame,
   FieldType,
+  DataQuery
 } from '@grafana/data';
 import { getBackendSrv } from '@grafana/runtime';
-import { MyQuery, MyDataSourceOptions } from './types';
+import {  MyDataSourceOptions } from './types';
 import { IsolationForest } from 'isolation-forest'
 
 type Point = {time: number, value: number};
 
-export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
+export class DataSource extends DataSourceApi<DataQuery, MyDataSourceOptions> {
 
   webserverURL: string;
 
@@ -22,45 +23,41 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
     this.webserverURL = instanceSettings.jsonData.webserver_url;
   }
 
-  async query(options: DataQueryRequest<MyQuery>): Promise<DataQueryResponse> {
+  async query(options: DataQueryRequest<DataQuery>): Promise<DataQueryResponse> {
+    // Extract the time range
     const {range} = options;
     const from = range!.from.valueOf();
     const to = range!.to.valueOf();
 
+    // Map each query to a requests
     const promises = options.targets.map((query) =>
         this.doRequest(query, from, to).then((response) => {
+          // Create result data frame
           const frame = new MutableDataFrame({
             refId: query.refId,
             fields: [
               {name: "Time", type: FieldType.time},
               {name: "Value", type: FieldType.number},
-              {name: "Outlier", type: FieldType.boolean },
             ],
           });
-
-          let full_points: Point[] = [];
-
+          // for each element of the query response add a row in the result data frame
           response.data.query_response.forEach((point: any) => {
-            full_points.push({time: point[0], value: point[1]});
+            frame.appendRow([point[0], point[1]]);
           });
-
-          const labels = this.getLabels(full_points);
-
-          for (let i = 0; i  < full_points.length;  i++) {
-            frame.appendRow([full_points[i].time, full_points[i].value, labels[i]]);
-          }
           return frame;
         })
     );
     return Promise.all(promises).then((data) => ({ data }));
   }
 
-  async doRequest(query: MyQuery, from: number, to: number) {
+  async doRequest(query: DataQuery, from: number, to: number) {
+    // Create the request params
     const request_params = {
       method: "GET",
       url: this.webserverURL + "/query",
       params: {"from": from, "to": to},
     };
+    // Perform the request
     const result = await getBackendSrv().datasourceRequest(request_params);
 
     return result;
