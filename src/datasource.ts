@@ -9,9 +9,6 @@ import {
 } from '@grafana/data';
 import { getBackendSrv } from '@grafana/runtime';
 import {  MyDataSourceOptions } from './types';
-import { IsolationForest } from 'isolation-forest'
-
-type Point = {time: number, value: number};
 
 export class DataSource extends DataSourceApi<DataQuery, MyDataSourceOptions> {
 
@@ -61,27 +58,6 @@ export class DataSource extends DataSourceApi<DataQuery, MyDataSourceOptions> {
     const result = await getBackendSrv().datasourceRequest(request_params);
 
     return result;
-  }
-
-
-
-  getLabels(full_points: Point[]) {
-
-    const isolation_forest = new IsolationForest();
-    isolation_forest.fit(full_points);
-
-    const scores = isolation_forest.scores();
-
-    let isolation_labels = [];
-
-    for (const score of scores) {
-      if (score > 0.6) {
-        isolation_labels.push(true);
-      } else {
-        isolation_labels.push(false);
-      }
-    }
-    return isolation_labels;
   }
 
   async testDatasource() {
