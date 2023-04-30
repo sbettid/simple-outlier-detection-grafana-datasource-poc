@@ -1,5 +1,3 @@
-<!-- This README file is going to be the one displayed on the Grafana.com website for your plugin -->
+# Simple Outlier Detection Grafana Datasource
 
-# Influx Db Ml
-
-An extension of the standard influx db datasource with outlying detection techniques
+For more information, please consult the parent [README](../README.md).

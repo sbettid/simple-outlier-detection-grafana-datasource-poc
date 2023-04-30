@@ -42,17 +42,21 @@ export class DataSource extends DataSourceApi<DataQuery, MyDataSourceOptions> {
             ],
           });
 
+          // Let's store the original points returned by the data source
           let full_points: Point[] = [];
 
           response.data.query_response.forEach((point: any) => {
             full_points.push({time: point[0], value: point[1]});
           });
 
-          const labels = this.getLabels(full_points);
+          // Get the labels, one for each point
+          const outlierLabels = this.getOutlierLabels(full_points);
 
+          // Store the points and labels in the resulting data frame
           for (let i = 0; i  < full_points.length;  i++) {
-            frame.appendRow([full_points[i].time, full_points[i].value, labels[i]]);
+            frame.appendRow([full_points[i].time, full_points[i].value, outlierLabels[i]]);
           }
+          // Return it!
           return frame;
         })
     );
@@ -72,23 +76,31 @@ export class DataSource extends DataSourceApi<DataQuery, MyDataSourceOptions> {
     return result;
   }
 
-  getLabels(full_points: Point[]) {
+  getOutlierLabels(full_points: Point[]) {
 
+    // Create the Isolation Forest object
     const isolation_forest = new IsolationForest();
+
+    // Feed it with our points
     isolation_forest.fit(full_points);
 
+    // Get back the anomaly scores
     const scores = isolation_forest.scores();
 
-    let isolation_labels = [];
+    // Let's store the true/false labels
+    let outlier_labels = [];
 
+    // Where a point is considered as anomaly if
+    // the anomaly score > 0.6
     for (const score of scores) {
       if (score > 0.6) {
-        isolation_labels.push(true);
+        outlier_labels.push(true);
       } else {
-        isolation_labels.push(false);
+        outlier_labels.push(false);
       }
     }
-    return isolation_labels;
+    // Return the labels
+    return outlier_labels;
   }
 
   async testDatasource() {
